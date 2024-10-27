@@ -5,9 +5,8 @@ require("dotenv").config();
 
 const app = express();
 
-// Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // Make sure to include this line
 
 // MongoDB Connection
 mongoose
@@ -45,8 +44,6 @@ const contactSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-
-const Contact = mongoose.model("Contact", contactSchema);
 
 // Contact route
 app.post("/contact", async (req, res) => {
