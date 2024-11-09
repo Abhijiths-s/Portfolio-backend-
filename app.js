@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const Contact = require("./models/Contact"); // Import the Contact model
+const Contact = require("./models/contact"); // Import the Contact model
 require("dotenv").config();
 
 const app = express();
@@ -11,13 +11,13 @@ app.use(express.json()); // Make sure to include this line
 
 // MongoDB Connection
 mongoose
-  .connect(process.env.MONGODB_URI, {
-  })
+  .connect(process.env.MONGODB_URI, {})
   .then(() => console.log("MongoDB Connected Successfully"))
   .catch((err) => console.log("MongoDB Connection Error:", err));
 
 // Contact route
 app.post("/api/contact", async (req, res) => {
+  console.log("Contact form submitted");
   try {
     const { name, email, subject, message } = req.body;
 
@@ -47,9 +47,21 @@ app.post("/api/contact", async (req, res) => {
 });
 
 // Get all contacts route
+// Get all contacts route
+app.get("/api/contact", async (req, res) => {
+  try {
+    const contacts = await Contact.find(); // Fetch all contacts from MongoDB
+    res.status(200).json(contacts); // Send the contacts as JSON
+  } catch (error) {
+    console.error("Error fetching contacts:", error);
+    res.status(500).json({
+      success: false,
+      message: "There was an error fetching contacts. Please try again.",
+    });
+  }
+});
 
-
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
