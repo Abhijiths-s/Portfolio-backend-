@@ -19,7 +19,7 @@ mongoose
   .catch((err) => console.log("MongoDB Connection Error:", err));
 
 // Contact route
-app.post("/contact", async (req, res) => {
+app.post("/api/contact", async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
 
@@ -49,46 +49,7 @@ app.post("/contact", async (req, res) => {
 });
 
 // Get all contacts route
-app.get("/contacts", async (req, res) => {
-  try {
-    const contacts = await Contact.find().sort({ createdAt: -1 });
-    res.json({
-      success: true,
-      data: contacts,
-    });
-  } catch (error) {
-    console.error("Error fetching contacts:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error fetching contacts",
-    });
-  }
-});
 
-// Delete contact route
-app.delete("/contact/:id", async (req, res) => {
-  try {
-    const deletedContact = await Contact.findByIdAndDelete(req.params.id);
-
-    if (!deletedContact) {
-      return res.status(404).json({
-        success: false,
-        message: "Contact not found",
-      });
-    }
-
-    res.json({
-      success: true,
-      message: "Contact deleted successfully",
-    });
-  } catch (error) {
-    console.error("Error deleting contact:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error deleting contact",
-    });
-  }
-});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
